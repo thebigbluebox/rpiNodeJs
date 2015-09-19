@@ -1,6 +1,6 @@
 var gpio = require("pi-gpio");
 
-var intervalId;
+ var intervalId;
  var durationId;
  var gpioPin = 16;
 
@@ -25,8 +25,7 @@ durationId= setTimeout( function(){
   clearTimeout(durationId);
   console.log('10 seconds blinking completed');
   gpio.write(gpioPin, 0, function() { // turn off pin 16
-    gpio.close(gpioPin); // then Close pin 16
-    process.exit(0); // and terminate the program
+    gpio.close(gpioPin); // then Close pin 1
   });
 },10000); // duration in mS
 
