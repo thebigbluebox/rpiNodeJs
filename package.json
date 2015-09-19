@@ -10,7 +10,9 @@
   "method-override": "~2.2.0",
   "busboy-body-parser": "latest",
   "multer": "~1.0.3",
-  "onoff": "latest"
+  "onoff": "latest",
+  "socket.io" : "latest",
+  "serialport" : "latest"
 	},
   "engines": {
     "node": "0.12.6"
