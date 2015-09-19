@@ -4,7 +4,12 @@ var intervalId;
  var durationId;
  var gpioPin = 16;
 
-gpio.open(gpioPin, "output", function(err) {
+
+var express = require('express');
+var app = express();
+app.use('/', function(req, res) {
+res.send('Hello World');
+  gpio.open(gpioPin, "output", function(err) {
 var on = 1;
 console.log('GPIO pin '+gpioPin+' is open. toggling LED every 100 mS for 10s');
 
@@ -24,3 +29,12 @@ durationId= setTimeout( function(){
     process.exit(0); // and terminate the program
   });
 },10000); // duration in mS
+
+});
+app.listen(3000);
+console.log('Server running at http://localhost:3000/');
+module.exports = app;
+
+
+
+
