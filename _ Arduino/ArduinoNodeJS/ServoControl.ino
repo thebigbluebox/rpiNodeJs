@@ -41,7 +41,7 @@ void loop(){
   }
   
   if (magnetPasses > calibrate){    //1 gallon of water detected
-    Serial.println(1);
+    Serial.println("B1E");
     magnetPasses = 0;
   }
   
