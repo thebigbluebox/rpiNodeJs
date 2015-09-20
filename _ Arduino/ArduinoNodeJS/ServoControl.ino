@@ -36,6 +36,7 @@ void rotateServo(int angle){
 void loop(){
   sensorValue = analogRead(sensorPin);    //read sensor data
   Serial.println(sensorValue);
+  delay(500);
   
   if (sensorValue < 50){        //magnetic field sensed
     magnetPasses++;
