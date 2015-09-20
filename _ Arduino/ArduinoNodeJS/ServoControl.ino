@@ -107,6 +107,8 @@ int ardprintf(char *str, ...) //Variadic Function
 
 void loop(){
   sensorValue = analogRead(sensorPin);
+  Serial.println(sensorValue);
+  delay(1000);
   ardprintf("B%d%s", sensorValue, "E");
   delay(500);
   
