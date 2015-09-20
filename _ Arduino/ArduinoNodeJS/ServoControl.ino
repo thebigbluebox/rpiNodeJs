@@ -109,13 +109,13 @@ void loop(){
   sensorValue = analogRead(sensorPin);
   Serial.println(sensorValue);
   delay(1000);
-  ardprintf("B%d%s", sensorValue, "E");
-  delay(500);
+  //ardprintf("B%d%s", sensorValue, "E");
+  //delay(500);
   
   if (sensorValue < 50){
     magnetPasses++;
-    ardprintf("B%d%s", magnetPasses, "E");
-    delay(100);
+    //ardprintf("B%d%s", magnetPasses, "E");
+    //delay(100);
   }
   
   if (magnetPasses > calibrate){
