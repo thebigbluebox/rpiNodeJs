@@ -2,6 +2,13 @@
  <html>
    <head>    
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <style>
 	body {
 		margin: 0px;
@@ -28,8 +35,16 @@
 	#btnHolder, #sliderTxt{
 	text-align:center;
 	}
+	body {
+  		padding-top: 60px;
+	}
+	@media (max-width: 979px) {
+  	body {
+    	padding-top: 0px;
+ 		}	
+	}
     </style>
-        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 	<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
     <script>
@@ -143,6 +158,10 @@
 	     });
 	}
 	
+	function isInArray(string,arr) {
+		return arr.indexOf(string) > -1;
+	}
+
 	window.onload = function() {
 	     initSocketIO();
         };
@@ -154,10 +173,73 @@
 	    iosocket.emit('buttonval',toggleVal);
 	 });
 	});
+	$(function() {
+		$('#timeframe').on('change', function(){
+    		var selected = $(this).find("option:selected").val();
+    		makeChart(selected);
+  		});
+  		$('#month').on('change', function() {
+  			//clean list
+  			$('#day').html('');
+
+	        var num_of_days;
+	        var twenty_eight_days = ["Feburary"];
+	        var thirty_days = ["April","June", "September", "November"];
+	        var thirty_one_days = ["January","March","May", "July", "August", "October", "December"]
+	        if (isInArray($('#month').val(),thirty_days)) {
+	          num_of_days = 30;
+	        } else if (isInArray($('#month').val(),thirty_one_days)) {
+	          num_of_days = 31;
+	        } else {
+	          num_of_days = 28;
+	        }
+	        for(var i = 1; i < num_of_days + 1; i++) {
+	          $('#day').append('<option>'+ i +'</option');
+	        }
+      	});
+ 	});
+
+	function makeChart(timeframe) {
+		labelList = [];
+		var ctx = document.getElementById("usagechart").getContext("2d");
+		if (timeframe == "secondly") {
+			labelList = ['00:00', '00:10', '00:20', '00:30', '00:40','00:50','01:00'];
+			$.ajax( )
+		}
+		else if (timeframe == "minutely") {
+			labelList = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00'];
+		} else if (timeframe == 'hourly') {
+			labelList = ['0', '1', '2', '3', '4','5','6'];
+		} else if (timeframe == 'daily') {
+			labelList = ['00:00', '00:10', '00:20', '00:30', '00:40','00:50','01:00'];
+		}
+
+		var data = {
+			labels: ['00:00', '00:10', '00:20', '00:30', '00:40','00:50','01:00'],
+			datasets: [
+				{
+					label: "My First dataset",
+	        		fillColor: "rgba(220,220,220,0.7)",
+	        		strokeColor: "rgba(220,220,220,1)",
+	        		pointColor: "rgba(220,220,220,1)",
+	        		pointStrokeColor: "#fff",
+	        		pointHighlightFill: "#fff",
+	        		pointHighlightStroke: "rgba(220,220,220,1)",
+	        		data: [1,0,1,0,1,1,1,0,0,1,0],
+	        		bezierCurve: false
+				}
+			]
+		};
+		var myLineChart = new Chart(ctx).Line(data);
+	}
+
     </script>
+    <title>Smart Meter</title>
+
   </head>
-  <body>
-   <div id="rData">
+  <body class = "container">
+  	<script type="text/javascript">var myFirebaseRef = new Firebase('https://SmartMeter.firebaseio.com/'); </script>
+   <!--<div id="rData">
 	<h2>Data from Arduino</h2>
     <canvas id="myCanvas" width="460" height="540"></canvas>
    </div>
@@ -168,6 +250,90 @@
 	</div>
 	<p id="sliderTxt">LED Dimmer</p>
 	<div id="slider"></div>
-   </div> 
+   </div> -->
+   <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Smart Meter</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class = "form-group col-md-9">
+    	<canvas id = 'usagechart' width = '800' height = '480'></canvas>
+    </div>
+    <div class="col-md-3 well" style="margin-top:10%; padding-top:2%">
+    	<div class = "form-group">
+    		 <label for="sel1">Select Timeframe:</label>
+      <select class="form-control" id="timeframe">
+        <option>-</option>
+        <option>By Minute</option>
+        <option>By Hour</option>
+        <option>By Day</option>
+        <option>By Month</option>
+      </select>
+      <label for="sel2">Select Month:</label>
+      <select class="form-control" id = "month">
+      	<option>-</option>
+        <option>January</option>
+        <option>Feburary</option>
+        <option>March</option>
+        <option>April</option>
+        <option>May</option>
+        <option>June</option>
+        <option>July</option>
+        <option>August</option>
+        <option>September</option>
+        <option>October</option>
+        <option>November</option>
+        <option>December</option>
+      </select>
+    </div>
+
+    <div class = "form-group">
+      <label for="sel3">Select Day: </label>
+      <!-- Make invisible if timeframe = Month -->
+      <select class = "form-control" id = "day">
+      </select>
+    </div>
+    x`
+
+    <div class = "form-group">
+      <button class = "form-control" id = 'firebaseSend'>Test Push</button>
+    </div>
+    <script>
+      $('#firebaseSend').click(function(){
+          var date = new Date();
+          var time = date.getTime();
+          myFirebaseRef.push({
+                              time: time,
+                              gallonsUsed: 15
+                            });
+        console.log("Sent!");  
+      });
+    </script>
+    </div>
+    <div class = "form-group">
+      <button class = "form-control btn btn-danger" id = 'firebaseReceive'>Test Pull</button>
+    </div>
+    <script>
+      $('#firebaseReceive').click(function(){
+        console.log("rec");
+        myFirebaseRef.limitToLast(3).on("child_added", function(snapshot) {
+        	console.log(snapshot.val());
+        });
+      });
+      
+    </script>
+    </div>  	
   </body>
 </html>
