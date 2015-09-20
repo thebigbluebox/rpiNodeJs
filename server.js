@@ -6,7 +6,7 @@ SerialPort = require("serialport").SerialPort
 
 var socketServer;
 var serialPort;
-var portName = 'COM3'; //change this to your Arduino port
+var portName = '/dev/ttyACM0'; //change this to your Arduino port
 var sendData = "";
 
 // handle contains locations to browse to (vote and poll); pathnames.
@@ -43,9 +43,11 @@ function initSocketIO(httpServer,debug)
 	socket.emit('updateData',{pollOneValue:data});
 	});
 	socket.on('buttonval', function(data) {
+		console.log('button val');
 		serialPort.write(data + 'E');
 	});
 	socket.on('sliderval', function(data) {
+		console.log('slideval');
 		serialPort.write(data + 'P');
 	});
 	
