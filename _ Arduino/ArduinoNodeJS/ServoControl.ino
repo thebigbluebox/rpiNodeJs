@@ -15,6 +15,7 @@ void setup(){
   pinMode(sensorPin, INPUT);    //set sensor input
   myservo.attach(9);            //set servo to pin 9
   myservo.write(90);            // set servo speed to 0
+  Serial.println("Hello Tai");
 }
 
 void rotateServo(int angle){
