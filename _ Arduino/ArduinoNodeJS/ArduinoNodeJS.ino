@@ -1,4 +1,4 @@
-// LED vars 
+// LED vars
 const int ledPin = 13;
 const int pwmPin = 3;
 
